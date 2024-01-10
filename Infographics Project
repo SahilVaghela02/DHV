@@ -1,0 +1,94 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# To Read data from CSV file
+df = pd.read_csv("Combined_Data.csv")
+
+# Set Seaborn style for a light background
+sns.set(style="whitegrid")
+
+# Data Visualization
+fig, axs = plt.subplots(2, 2, figsize=(14, 16))
+
+# Define the list of selected countries
+selected_countries = ['Denmark', 'Finland', 'Afghanistan', 'Niger', 'Guinea']
+
+# Plot 1: Literacy of people in percentage
+axs[0, 0].set_title('Literacy of People')
+for country in selected_countries:
+    country_data = df[df['Country'] == country]
+    axs[0, 0].plot(country_data['Year'], country_data['Literacy'],
+                   marker='o', label=country)
+
+axs[0, 0].set_xlabel('Years')
+axs[0, 0].set_ylabel('Literacy in %')
+axs[0, 0].legend()
+
+# Plot 2: Government expenditure on education from its total GDP
+axs[0, 1].set_title('Government Expenditure for Education')
+for country in selected_countries:
+    country_data = df[df['Country'] == country]
+    axs[0, 1].plot(country_data['Year'],
+                   country_data['Government Expenditure'], marker='o', label=country)
+
+axs[0, 1].set_xlabel('Years')
+axs[0, 1].set_ylabel('Education Expenditure')
+axs[0, 1].legend()
+
+# Plot 3 - GDP per head
+selected_year_edu = 2019
+data_for_year_and_countries_edu = df[(df['Year'] == selected_year_edu) & (
+    df['Country'].isin(selected_countries))]
+
+bar_colors = sns.color_palette('pastel')
+
+axs[1, 0].bar(data_for_year_and_countries_edu['Country'],
+              data_for_year_and_countries_edu['GDP per Capita'], color=bar_colors)
+axs[1, 0].set_title(f'GDP per head')
+axs[1, 0].set_xlabel('Country')
+axs[1, 0].set_ylabel('GDP in USD')
+
+# Plot 4 - Happiness Score 
+selected_year = 2019
+data_for_year_and_countries = df[(df['Year'] == selected_year) & (
+    df['Country'].isin(selected_countries))]
+
+axs[1, 1].bar(data_for_year_and_countries['Country'],
+              data_for_year_and_countries['Happiness Score'], color='skyblue')
+axs[1, 1].set_title(
+    f'Happiness Score')
+axs[1, 1].set_xlabel('Country')
+axs[1, 1].set_ylabel('GDP per Capita')
+
+# Rotate x-axis labels for better readability if needed
+axs[1, 1].tick_params(axis='x', rotation=45)
+
+
+# Enhanced explanations with introduction and conclusion remarks
+intro_remark = "The presented visualization illustrates the correlation between government initiatives in education and the potential for increased happiness among its populace.\n"
+conclusion_remark = "\nIn summary, it can be affirmed that government initiatives and literacy are pivotal factors contributing to both financial prosperity and overall happiness."
+explanations = [
+    "1. The initial plot distinctly reveals that Denmark and Finland stand out as highly literate nations, whereas Niger exhibits the lowest literacy rate, falling below 20%.",
+    "2. The second plot underscores the connection between government spending and literacy rates across diverse countries. Specifically, in Niger, the government allocates a mere 2.5% to 3% of its total GDP for educational purposes.",
+    "3. From the information presented in the third plot, it is evident that countries with greater literacy rates also experience higher levels of GDP per capita.",
+    "4. The final plot suggests that individuals with higher incomes generally experience greater happiness compared to those with lower earnings."
+]
+
+# Explanation text aligned to the right, next to the plots
+fig.text(1.05, 0.5, "\n".join([intro_remark] + explanations +
+         [conclusion_remark]), ha='left', va='center', fontsize=20)
+
+fig.suptitle("How Literacy is Connected with Happiness", fontsize=20, y=0.98)
+
+# Adjust layout for better visualization
+plt.tight_layout(rect=[0, 0.03, 1, 0.96])
+
+# Add your name and ID
+fig.text(0.99, 0.2, "SAHIL MAYURBHAI VAGHELA\n22083450",
+         ha="left", va="bottom", color='black')
+
+# Save the figure
+plt.savefig("22083450.png", dpi=300, bbox_inches='tight')  # Add bbox_inches='tight'
+plt.show()
